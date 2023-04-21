@@ -1,0 +1,53 @@
+.form {
+  padding: 2rem 4rem;
+  &__title.ant-typography {
+    text-align: center;
+    margin: 2rem 0 3rem;
+    font-weight: bold;
+    color: var(--text-color);
+  }
+
+  &__item {
+    .ant-form-item-label > label {
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--text-color);
+    }
+  }
+
+  &__btn {
+    width: 100%;
+  }
+
+  &__icon,
+  .ant-input-password-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    color: var(--text-color-lighter);
+  }
+
+  &-other-action {
+    font-size: 1.4rem;
+    font-weight: 500;
+
+    .ant-checkbox-wrapper {
+      .ant-checkbox {
+        translate: 0 2px;
+      }
+    }
+
+    .ant-form-item-control-input-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  &-redirect {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text-color);
+    text-align: center;
+    margin-top: 2rem;
+  }
+}

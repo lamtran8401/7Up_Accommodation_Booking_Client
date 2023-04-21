@@ -1,17 +1,16 @@
 import { Link, Outlet } from 'react-router-dom'
-import './Form.scss'
+import './form.scss'
 import './style.scss'
+import logo from '../../assets/images/logo.png'
 
 const AuthLayout = () => {
   return (
     <div className='auth-layout'>
       <div className='auth-layout__logo'>
         <Link to='/'>
-          Home
-          {/* <img src={logo} alt='Brand Logo' loading='lazy' className='auth-layout__logo' /> */}
+          <img src={logo} alt='Brand Logo' loading='lazy' className='auth-layout__logo' />
         </Link>
       </div>
-      <div>hello</div>
       <Outlet />
     </div>
   )

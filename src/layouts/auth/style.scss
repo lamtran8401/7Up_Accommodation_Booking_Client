@@ -1,0 +1,15 @@
+.auth-layout {
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  width: min(90%, 50rem);
+
+  .auth-layout__logo {
+    width: 20rem;
+    align-self: center;
+
+    > img {
+      width: 100%;
+    }
+  }
+}
