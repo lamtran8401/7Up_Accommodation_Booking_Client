@@ -1,0 +1,62 @@
+@import 'normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+:root {
+  --primary-color: #5046e5;
+  --primary-color-dark: #4338ca;
+  --primary-color-light: #5e53f0;
+  --danger-color: #dc2625;
+  --danger-color-dark: #b91c1b;
+  --line-color: #e5e7eb;
+  --text-color: #374151;
+  --text-color-light: #6b7280;
+  --text-color-lighter: #9ca3af;
+  --text-color-dark: #111827;
+  --grey-color: #f9fafb;
+  --grey-color-light: #f1f5f9;
+  --grey-color-dark: #f3f4f6;
+  --get-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --line-color: #0505050f;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-family: 'Inter', 'Arimo', 'Roboto', sans-serif;
+  font-size: 1.6rem;
+  line-height: 1.5;
+  text-rendering: optimizeSpeed;
+}
+
+a {
+  text-decoration: none;
+}
+
+.container {
+  padding: 0 10rem;
+}
+
+.link {
+  font-size: 1.4rem;
+  color: var(--primary-color-light);
+  font-weight: 500;
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    color: var(--primary-color-dark);
+  }
+}
+
+svg.icon {
+  width: 2.2rem;
+  height: 2.2rem;
+  transition: all 0.3s ease-in-out;
+}
