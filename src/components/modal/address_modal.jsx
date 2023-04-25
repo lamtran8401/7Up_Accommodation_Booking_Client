@@ -1,6 +1,6 @@
-import { Button, Checkbox, Form, Input, Typography, Select, Modal, message } from 'antd';
-import React, { useState, useEffect } from 'react';
+import { Button, Form, Input, Modal, Select } from 'antd';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
 const AddressModal = ({ open, onCancel, onOk }) => {
     const [cities, setCities] = useState([]);
     const [districts, setDistrists] = useState([]);

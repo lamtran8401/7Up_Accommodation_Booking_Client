@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import './PostRoom.scss';
-import { Button, Form, Input, Typography, Select, Col, Row, Upload, Modal, message, InputNumber, Image } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { EyeIcon, EyeSlashIcon, LockClosedIcon, TagIcon, UserIcon } from '@heroicons/react/24/outline';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import AddressModal from '../../components/modal/address_modal';
+import { Button, Col, Form, Input, InputNumber, Modal, Row, Select, Typography, Upload, message } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import { storage } from '../../firebaseConfig';
-import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import axios from 'axios';
+import { ref, uploadBytesResumable } from 'firebase/storage';
+import { useState } from 'react';
+import AddressModal from '../../components/modal/address_modal';
 import { URL_API_POST } from '../../constant';
+import { storage } from '../../firebaseConfig';
+import './PostRoom.scss';
 const PostRoom = () => {
     //Init
     const maxFile = 8;

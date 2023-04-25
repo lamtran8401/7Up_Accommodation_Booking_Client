@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ES5",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  }
+}
