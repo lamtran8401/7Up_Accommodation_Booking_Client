@@ -1,10 +1,15 @@
+import Rooms from '@/components/rooms';
+import { useLoaderData } from 'react-router-dom';
+
 const IndexPage = () => {
+    const data = useLoaderData();
+    console.log(data);
+
     return (
         <div>
-            <h1>Index Page</h1>
-            <section>Section Search</section>
-            <hr />
-            <section>Section Show Room List</section>
+            <section>
+                <Rooms title="Tin đăng mới nhất" data={data} />
+            </section>
         </div>
     );
 };

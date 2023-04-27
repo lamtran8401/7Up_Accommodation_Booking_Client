@@ -1,3 +1,4 @@
+import loadRooms from '@/dev/rooms-data';
 import AuthLayout from '@/layouts/auth';
 import MainLayout from '@/layouts/main';
 import IndexPage from '@/pages';
@@ -14,6 +15,11 @@ const router = createBrowserRouter([
             {
                 path: '',
                 element: <IndexPage />,
+                loader: loadRooms,
+            },
+            {
+                path: 'rooms/:id',
+                element: <div>Room detail</div>,
             },
         ],
     },
