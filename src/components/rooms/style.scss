@@ -8,4 +8,12 @@
     > li {
         list-style-type: none;
     }
+
+    & + .ant-pagination {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
 }

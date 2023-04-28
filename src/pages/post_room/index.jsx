@@ -2,11 +2,11 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, InputNumber, Modal, Row, Select, Typography, Upload, message } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import axios from 'axios';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { useState } from 'react';
 import AddressModal from '../../components/modal-address';
 import { storage } from '../../config/firebase';
-import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
-import { successMessageCounDown, errorMessageCounDown } from '../../config/utils';
-import React, { useState, useEffect } from 'react';
+import { errorMessageCounDown, successMessageCounDown } from '../../config/utils';
 import './PostRoom.scss';
 const PostRoom = () => {
     //Init
@@ -39,6 +39,11 @@ const PostRoom = () => {
                 (err) => {
                     console.log(err.serverResponse);
                 },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        console.log('File available at', downloadURL);
+                    });
+                },
             );
         });
     };
@@ -49,7 +54,7 @@ const PostRoom = () => {
         loading.classList.remove('hide-loader');
         loading.classList.add('show-loader');
         axios
-            .post(`${import.meta.env.VITE_API_BASE_URL}/room/create/1`, values)
+            .post(`${import.meta.env.VITE_API_BASE_URL}/rooms/create/1`, values)
             .then((response) => {
                 hanldeUploadFileToFirebase();
                 Promise.all(promises)

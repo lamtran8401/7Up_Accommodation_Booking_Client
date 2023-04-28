@@ -1,4 +1,4 @@
-import { Typography } from 'antd';
+import { Pagination, Typography } from 'antd';
 import Room from '../room';
 import './style.scss';
 
@@ -13,6 +13,7 @@ const Rooms = ({ title, data }) => {
                     </li>
                 ))}
             </ul>
+            <Pagination defaultCurrent={1} total={50} />
         </>
     );
 };
