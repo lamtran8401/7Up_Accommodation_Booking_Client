@@ -21,6 +21,10 @@ const router = createBrowserRouter([
                 path: 'rooms/:id',
                 element: <div>Room detail</div>,
             },
+            {
+                path: '/post-room',
+                element: <PostRoom />,
+            },
         ],
     },
     {
@@ -36,10 +40,6 @@ const router = createBrowserRouter([
                 element: <Register />,
             },
         ],
-    },
-    {
-        path: '/post_room',
-        element: <PostRoom />,
     },
 ]);
 

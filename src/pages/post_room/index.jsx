@@ -2,11 +2,11 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, InputNumber, Modal, Row, Select, Typography, Upload, message } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import axios from 'axios';
-import { ref, uploadBytesResumable } from 'firebase/storage';
-import { useState } from 'react';
-import AddressModal from '../../components/modal/address_modal';
-import { URL_API_POST } from '../../constant';
-import { storage } from '../../firebaseConfig';
+import AddressModal from '../../components/modal-address';
+import { storage } from '../../config/firebase';
+import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import { successMessageCounDown, errorMessageCounDown } from '../../config/utils';
+import React, { useState, useEffect } from 'react';
 import './PostRoom.scss';
 const PostRoom = () => {
     //Init
@@ -21,23 +21,26 @@ const PostRoom = () => {
     const [progresspercent, setProgresspercent] = useState(0);
     const [imgUrl, setImgUrl] = useState(null);
     const [addressObj, setAddressObj] = useState({});
+    const [modalMessage, contextHolderMessage] = Modal.useModal();
+    const promises = [];
 
     //Submit form
     const hanldeUploadFileToFirebase = () => {
         const files = fileList.map((file) => file.originFileObj);
-        const promises = [];
         files.map((file) => {
             const storageRef = ref(storage, `files/${file.name}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
             promises.push(uploadTask);
-            uploadTask.on('state_changed', (error) => {
-                message.error(error);
-            });
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+                    console.log('upload image successfull');
+                },
+                (err) => {
+                    console.log(err.serverResponse);
+                },
+            );
         });
-
-        Promise.all(promises)
-            .then(() => alert('All images uploaded'))
-            .then((err) => console.log(err));
     };
     const hanldeSubmitForm = (values) => {
         values.images = fileList.map((file) => file.name);
@@ -46,20 +49,28 @@ const PostRoom = () => {
         loading.classList.remove('hide-loader');
         loading.classList.add('show-loader');
         axios
-            .post(`${URL_API_POST}/1`, values)
+            .post(`${import.meta.env.VITE_API_BASE_URL}/room/create/1`, values)
             .then((response) => {
                 hanldeUploadFileToFirebase();
-                console.log(response);
-                form.resetFields();
-                setFileList([]);
-                messageApi.success('Tuyệt vời cmnl');
-                loading.classList.remove('show-loader');
-                loading.classList.add('hide-loader');
+                Promise.all(promises)
+                    .then(() => {
+                        form.resetFields();
+                        setFileList([]);
+                        loading.classList.remove('show-loader');
+                        loading.classList.add('hide-loader');
+                        successMessageCounDown(5, 'Đăng tin thành công', modalMessage);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        errorMessageCounDown(5, 'Tải ảnh thất bại', modalMessage);
+                    });
             })
             .catch((response) => {
                 //handle error
+                loading.classList.remove('show-loader');
+                loading.classList.add('hide-loader');
+                errorMessageCounDown(5, 'Đăng tin thất bại', modalMessage);
                 console.log(response);
-                messageApi.error('Lỗi cmnr');
             });
     };
 
@@ -327,6 +338,7 @@ const PostRoom = () => {
                 />
             </Modal>
             <AddressModal open={visibleModal} onCancel={hanldeCanleModal} onOk={hanldeSubmitAddress} />
+            {contextHolderMessage}
         </div>
     );
 };

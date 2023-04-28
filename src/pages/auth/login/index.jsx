@@ -1,17 +1,36 @@
 import { EyeIcon, EyeSlashIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline';
 import { Button, Checkbox, Form, Input, Typography } from 'antd';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const Login = () => {
     const [form] = Form.useForm();
+    const hanldeSubmitForm = (values) => {
+        axios
+            .get(
+                `${import.meta.env.VITE_API_BASE_URL}/account/login?username=${values.username}&password=${
+                    values.password
+                }`,
+            )
+            .then((response) => {
+                if (response.data) {
+                    alert('Đăng nhập thành công');
+                } else {
+                    alert('Email hoặc mật khẩu không đúng');
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     return (
         <div className="login">
             <Typography.Title level={2} className="form__title">
                 Sign in to your account
             </Typography.Title>
-            <Form form={form} layout="vertical" className="form sign--form">
+            <Form form={form} layout="vertical" className="form sign--form" onFinish={hanldeSubmitForm}>
                 <Form.Item
-                    name="email"
+                    name="username"
                     label="Email Address"
                     className="form__item"
                     required={false}
