@@ -14,7 +14,10 @@ const Room = ({ item }) => {
     // const { title, image, price, location, size } = item;
     const { title, listImages, rentCost, location, size } = item;
 
-    const image = `https://firebasestorage.googleapis.com/v0/b/accommodation-306b8.appspot.com/o/files%2F${listImages[0]}?alt=media`;
+    const image =
+        listImages.length > 0
+            ? `https://firebasestorage.googleapis.com/v0/b/accommodation-306b8.appspot.com/o/files%2F${listImages[0]}?alt=media`
+            : null;
 
     const handleClick = () => {
         navigate(`/rooms/${item.id}`);
