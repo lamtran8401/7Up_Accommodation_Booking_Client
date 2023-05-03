@@ -9,6 +9,6 @@ export const loadRooms = () => {
             return res.data;
         })
         .catch((err) => {
-            return err;
+            return { error: err.message, ...err };
         });
 };
