@@ -26,54 +26,54 @@ const Login = () => {
     return (
         <div className="login">
             <Typography.Title level={2} className="form__title">
-                Sign in to your account
+                Đăng nhập
             </Typography.Title>
             <Form form={form} layout="vertical" className="form sign--form" onFinish={hanldeSubmitForm}>
                 <Form.Item
                     name="username"
-                    label="Email Address"
+                    label="Địa chỉ email"
                     className="form__item"
                     required={false}
                     rules={[
-                        { required: true, message: 'Please input your Username!' },
+                        { required: true, message: 'Vui lòng nhập email!' },
                         {
                             type: 'email',
-                            message: 'The input is not valid E-mail!',
+                            message: 'Email không hợp lệ!',
                         },
                     ]}
                 >
-                    <Input placeholder="Type your email address here..." prefix={<UserIcon className="form__icon" />} />
+                    <Input placeholder="Nhập email ở đây..." prefix={<UserIcon className="form__icon" />} />
                 </Form.Item>
                 <Form.Item
                     name="password"
-                    label="Password"
+                    label="Mật khẩu"
                     className="form__item"
                     required={false}
-                    rules={[{ required: true, message: 'Please input your Password!' }]}
+                    rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
                 >
                     <Input.Password
                         prefix={<LockClosedIcon className="form__icon" />}
                         iconRender={(visible) => (visible ? <EyeIcon /> : <EyeSlashIcon />)}
-                        placeholder="Type your password here..."
+                        placeholder="Nhập mật khẩu ở đây..."
                     />
                 </Form.Item>
                 <Form.Item className="form-other-action">
-                    <Checkbox className="form__remember">Remember me</Checkbox>
+                    <Checkbox className="form__remember">Nhớ mật khẩu</Checkbox>
                     <Link to="#" className="link">
-                        Forgot your password?
+                        Bạn quên mật khẩu ?
                     </Link>
                 </Form.Item>
                 <Form.Item className="form__item">
                     <Button className="form__btn" type="primary" htmlType="submit">
-                        Sign in
+                        Đăng ký
                     </Button>
                 </Form.Item>
             </Form>
             <div className="form-redirect">
                 <span>
-                    Do not have an account?{' '}
+                    Bạn có muốn tạo tài khoản không ?{' '}
                     <Link to="/auth/register" className="link">
-                        Sign up now
+                        Đăng ký ngay
                     </Link>
                 </span>
             </div>
