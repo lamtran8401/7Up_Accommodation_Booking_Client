@@ -8,7 +8,7 @@ const Login = () => {
     const hanldeSubmitForm = (values) => {
         axios
             .get(
-                `${import.meta.env.VITE_API_BASE_URL}/account/login?username=${values.username}&password=${
+                `${import.meta.env.VITE_API_BASE_URL}/accounts/login?username=${values.username}&password=${
                     values.password
                 }`,
             )
