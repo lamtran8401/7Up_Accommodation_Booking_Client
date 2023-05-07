@@ -53,6 +53,8 @@ const PostRoom = () => {
         let loading = document.getElementById('loading');
         loading.classList.remove('hide-loader');
         loading.classList.add('show-loader');
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
         axios
             .post(`${import.meta.env.VITE_API_BASE_URL}/rooms/create/1`, values)
             .then((response) => {
