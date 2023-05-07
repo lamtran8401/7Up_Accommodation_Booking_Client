@@ -1,0 +1,68 @@
+.room {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        box-shadow: var(--get-shadow);
+    }
+
+    .ant-card {
+        &-body {
+            padding: 1.6rem;
+
+            .ant-typography {
+                margin-bottom: 0.5rem;
+            }
+        }
+        &-meta {
+            &-title {
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                white-space: normal;
+                line-height: 1.3;
+                margin-bottom: 1rem;
+            }
+        }
+    }
+
+    .ant-card-cover {
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    img {
+        height: 26rem;
+        object-fit: cover;
+        line-height: 0;
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+            opacity: 0.9;
+            scale: 1.1;
+        }
+    }
+
+    &__area {
+        font-size: 1.4rem;
+    }
+
+    &__price {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+
+    &__location {
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+
+        .icon {
+            width: 1.6rem;
+            margin-top: -2px;
+            margin-right: 2px;
+        }
+    }
+}

@@ -4,6 +4,7 @@ import IndexPage from '@/pages';
 import Login from '@/pages/auth/login';
 import Register from '@/pages/auth/register';
 import PostRoom from '@/pages/post_room';
+import { loadRooms } from '@/services/room';
 import { createBrowserRouter } from 'react-router-dom';
 
 const router = createBrowserRouter([
@@ -14,6 +15,15 @@ const router = createBrowserRouter([
             {
                 path: '',
                 element: <IndexPage />,
+                loader: async () => loadRooms(),
+            },
+            {
+                path: 'rooms/:id',
+                element: <div>Room detail</div>,
+            },
+            {
+                path: '/post-room',
+                element: <PostRoom />,
             },
         ],
     },
@@ -30,10 +40,6 @@ const router = createBrowserRouter([
                 element: <Register />,
             },
         ],
-    },
-    {
-        path: '/post_room',
-        element: <PostRoom />,
     },
 ]);
 

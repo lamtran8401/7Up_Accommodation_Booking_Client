@@ -1,4 +1,4 @@
-#header {
+#header.ant-layout-header {
     background-color: #fff;
     position: sticky;
     top: 0;
@@ -7,6 +7,8 @@
     height: 6.4rem;
     box-shadow: var(--get-shadow);
     display: flex;
+    justify-content: space-between;
+    align-items: center;
 
     .logo {
         width: 12rem;
@@ -37,7 +39,6 @@
     }
 
     .top-action {
-        margin-left: auto;
         display: flex;
         align-items: center;
         justify-content: center;

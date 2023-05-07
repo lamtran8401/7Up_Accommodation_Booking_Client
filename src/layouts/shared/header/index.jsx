@@ -1,4 +1,5 @@
 import logo from '@/assets/images/logo.png';
+import Search from '@/components/search';
 import { Button, Divider, Layout } from 'antd';
 import { Link } from 'react-router-dom';
 import './style.scss';
@@ -12,6 +13,7 @@ const Header = () => {
                     <span>SVHost</span>
                 </Link>
             </div>
+            <Search />
             <div className="top-action">
                 <Link to="/auth/register" className="btn-action">
                     Tạo tài khoản
