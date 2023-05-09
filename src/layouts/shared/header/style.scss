@@ -44,17 +44,28 @@
         justify-content: center;
         font-weight: 500;
 
+        > *:not(:first-child) {
+            margin-left: 2rem;
+        }
+
         .btn-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.2s ease-in-out;
 
-            &:hover {
+            &:is(a):hover {
                 color: var(--primary-color-light);
+            }
+
+            .icon {
+                margin-right: 0.5rem;
             }
         }
 
         .ant-divider {
             height: 2rem;
-            margin: 0 2rem;
+            margin: 0 0 0 2rem;
         }
         a {
             color: var(--text-color-light);
