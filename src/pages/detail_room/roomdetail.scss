@@ -1,0 +1,72 @@
+.room-detail {
+    padding: 24px;
+
+    .photo-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 32px;
+
+        .photo {
+            width: 250px;
+            height: 250px;
+            margin: 0 12px 12px 0;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .host-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 24px;
+
+        .ant-avatar {
+            margin-right: 16px;
+        }
+
+        .ant-typography {
+            margin: 0;
+        }
+    }
+
+    .room-info {
+        margin-bottom: 24px;
+
+        .ant-rate {
+            margin-right: 8px;
+        }
+
+        .ant-typography {
+            margin: 0;
+        }
+    }
+
+    .amenities {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+
+        .ant-typography {
+            margin-right: 16px;
+            margin-bottom: 8px;
+        }
+    }
+
+    .reviews {
+        margin-bottom: 24px;
+
+        .ant-list-item-meta-avatar {
+            margin-right: 16px;
+        }
+
+        .ant-list-item-meta-title {
+            margin: 0;
+        }
+
+        .ant-list-item-meta-description {
+            margin: 0;
+        }
+    }
+}
