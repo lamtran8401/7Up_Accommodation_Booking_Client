@@ -1,11 +1,19 @@
 import { EyeIcon, EyeSlashIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline';
-import { Button, Checkbox, Form, Input, Typography } from 'antd';
+import { Button, Checkbox, Form, Input, Modal, Typography } from 'antd';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { errorMessageCounDown, successMessageCounDown } from '../../../config/utils';
+import { AuthContext } from '@/context/authContext';
+import { useContext } from 'react';
 
 const Login = () => {
     const [form] = Form.useForm();
+    const [modalMessage, contextHolderMessage] = Modal.useModal();
+    const naviagte = useNavigate();
+    const [, setCurrentUser] = useContext(AuthContext);
     const hanldeSubmitForm = (values) => {
+        loading.classList.remove('hide-loader');
+        loading.classList.add('show-loader');
         axios
             .get(
                 `${import.meta.env.VITE_API_BASE_URL}/accounts/login?username=${values.username}&password=${
@@ -14,9 +22,13 @@ const Login = () => {
             )
             .then((response) => {
                 if (response.data) {
-                    alert('Đăng nhập thành công');
+                    console.log(response.data);
+                    setCurrentUser(response.data);
+                    naviagte('/');
                 } else {
-                    alert('Email hoặc mật khẩu không đúng');
+                    loading.classList.add('hide-loader');
+                    loading.classList.remove('show-loader');
+                    errorMessageCounDown(5, 'Email hoặc mật khẩu không đúng', modalMessage);
                 }
             })
             .catch((err) => {
@@ -28,6 +40,7 @@ const Login = () => {
             <Typography.Title level={2} className="form__title">
                 Đăng nhập
             </Typography.Title>
+            <div id="loading" className="loader-line hide-loader"></div>
             <Form form={form} layout="vertical" className="form sign--form" onFinish={hanldeSubmitForm}>
                 <Form.Item
                     name="username"
@@ -77,6 +90,7 @@ const Login = () => {
                     </Link>
                 </span>
             </div>
+            {contextHolderMessage}
         </div>
     );
 };
