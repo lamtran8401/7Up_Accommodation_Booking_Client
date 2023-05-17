@@ -17,7 +17,7 @@ const Rooms = ({ title, data = [] }) => {
                             </li>
                         ))}
                     </ul>
-                    <Pagination defaultCurrent={1} total={50} />
+                    <Pagination defaultCurrent={1} pageSize={10} total={data.length} />
                 </>
             )}
         </>

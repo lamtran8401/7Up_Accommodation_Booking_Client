@@ -1,104 +1,110 @@
-import {
-  EnvelopeIcon,
-  EyeIcon,
-  EyeSlashIcon,
-  LockClosedIcon,
-  UserIcon,
-} from '@heroicons/react/24/outline'
-import { Button, Form, Input, Typography } from 'antd'
-import { Link } from 'react-router-dom'
+import { EnvelopeIcon, EyeIcon, EyeSlashIcon, LockClosedIcon, UserIcon } from '@heroicons/react/24/outline';
+import { Button, Form, Input, Modal, Typography } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
+import { errorMessageCounDown, successMessageCounDown } from '../../../config/utils';
+import axios from 'axios';
 
 const Register = () => {
-  const [form] = Form.useForm()
-
-  return (
-    <div className='register'>
-      <Typography.Title level={2} className='form__title'>
-        Sign up to create your account
-      </Typography.Title>
-      <Form form={form} layout='vertical' className='form sign-up-form'>
-        <Form.Item
-          name='name'
-          label='Full Name'
-          className='form__item'
-          required={false}
-          rules={[{ required: true, message: 'Please input your name!' }]}>
-          <Input
-            placeholder='Type your name here...'
-            prefix={<UserIcon className='form__icon' />}
-          />
-        </Form.Item>
-        <Form.Item
-          name='email'
-          label='Email Address'
-          className='form__item'
-          required={false}
-          rules={[
-            { required: true, message: 'Please input your Username!' },
-            {
-              type: 'email',
-              message: 'The input is not valid E-mail!',
-            },
-          ]}>
-          <Input
-            placeholder='Type your email address here...'
-            prefix={<EnvelopeIcon className='form__icon' />}
-          />
-        </Form.Item>
-        <Form.Item
-          name='password'
-          label='Password'
-          className='form__item'
-          required={false}
-          rules={[
-            { required: true, message: 'Please input your Password!' },
-            { min: 6, message: 'Password must be at least 6 characters!' },
-          ]}>
-          <Input.Password
-            prefix={<LockClosedIcon className='form__icon' />}
-            iconRender={visible => (visible ? <EyeIcon /> : <EyeSlashIcon />)}
-            placeholder='Type your password here...'
-          />
-        </Form.Item>
-        <Form.Item
-          name='confirmPassword'
-          label='Confirm Password'
-          className='form__item'
-          required={false}
-          rules={[
-            { required: true, message: 'Please input your Password!' },
-            { min: 6, message: 'Password must be at least 6 characters!' },
-            ({ getFieldValue }) => ({
-              validator: (_, value) => {
-                if (!value || getFieldValue('password') === value) {
-                  return Promise.resolve()
+    const [form] = Form.useForm();
+    const [modalMessage, contextHolderMessage] = Modal.useModal();
+    const naviagte = useNavigate();
+    const hanldeSubmitForm = (values) => {
+        loading.classList.remove('hide-loader');
+        loading.classList.add('show-loader');
+        values.type = 'NORMAL';
+        axios
+            .post(`${import.meta.env.VITE_API_BASE_URL}/accounts/register`, values)
+            .then((response) => {
+                if (response.data) {
+                    naviagte('/auth/login');
                 }
-                return Promise.reject(new Error('The two passwords that you entered do not match!'))
-              },
-            }),
-          ]}>
-          <Input.Password
-            prefix={<LockClosedIcon className='form__icon' />}
-            iconRender={visible => (visible ? <EyeIcon /> : <EyeSlashIcon />)}
-            placeholder='Type your password again here...'
-          />
-        </Form.Item>
-        <Form.Item className='form__item'>
-          <Button className='form__btn' type='primary' htmlType='submit'>
-            Sign up
-          </Button>
-        </Form.Item>
-      </Form>
-      <div className='form-redirect'>
-        <span>
-          Already have an account?{' '}
-          <Link to='/auth/login' className='link'>
-            Sign in now
-          </Link>
-        </span>
-      </div>
-    </div>
-  )
-}
+            })
+            .catch((response) => {
+                console.log(response.response);
+                loading.classList.add('hide-loader');
+                loading.classList.remove('show-loader');
+                if (response.response.data.status == 409) {
+                    errorMessageCounDown(5, 'Email đã tồn tại', modalMessage);
+                } else {
+                    errorMessageCounDown(5, 'Đăng ký thất bại', modalMessage);
+                }
+            });
+    };
+    return (
+        <div className="register">
+            <Typography.Title level={2} className="form__title">
+                Đăng ký
+            </Typography.Title>
+            <div id="loading" className="loader-line hide-loader"></div>
+            <Form form={form} layout="vertical" className="form sign-up-form" onFinish={hanldeSubmitForm}>
+                <Form.Item
+                    name="username"
+                    label="Email"
+                    className="form__item"
+                    required={false}
+                    rules={[
+                        { required: true, message: 'Vui lòng nhập email!' },
+                        {
+                            type: 'email',
+                            message: 'Email không hợp lệ',
+                        },
+                    ]}
+                >
+                    <Input placeholder="Nhập email ở đây." prefix={<EnvelopeIcon className="form__icon" />} />
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    label="Mật khẩu"
+                    className="form__item"
+                    required={false}
+                    rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
+                >
+                    <Input.Password
+                        prefix={<LockClosedIcon className="form__icon" />}
+                        iconRender={(visible) => (visible ? <EyeIcon /> : <EyeSlashIcon />)}
+                        placeholder="Nhâp mật khẩu ở đây"
+                    />
+                </Form.Item>
+                <Form.Item
+                    name="confirmPassword"
+                    label="Xác nhận mật khẩu"
+                    className="form__item"
+                    required={false}
+                    rules={[
+                        { required: true, message: 'Vui lòng xác nhận mật khẩu!' },
+                        ({ getFieldValue }) => ({
+                            validator: (_, value) => {
+                                if (!value || getFieldValue('password') === value) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('Mật khẩu không khớp!'));
+                            },
+                        }),
+                    ]}
+                >
+                    <Input.Password
+                        prefix={<LockClosedIcon className="form__icon" />}
+                        iconRender={(visible) => (visible ? <EyeIcon /> : <EyeSlashIcon />)}
+                        placeholder=""
+                    />
+                </Form.Item>
+                <Form.Item className="form__item">
+                    <Button className="form__btn" type="primary" htmlType="submit">
+                        Đăng ký
+                    </Button>
+                </Form.Item>
+            </Form>
+            <div className="form-redirect">
+                <span>
+                    Bạn đã có tài khoản?{' '}
+                    <Link to="/auth/login" className="link">
+                        Đăng nhập ngay
+                    </Link>
+                </span>
+            </div>
+            {contextHolderMessage}
+        </div>
+    );
+};
 
-export default Register
+export default Register;

@@ -1,9 +1,10 @@
-import { Row, Col, Card, Avatar, Divider, Rate, List, Typography, Button } from 'antd';
+import { Row, Col, Card, Avatar, Divider, Rate, List, Typography, Button, Carousel } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import './roomdetail.scss';
 import { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Loading from '@/components/loading_page';
 
 const { Title, Text } = Typography;
 
@@ -26,20 +27,27 @@ const roomInfo = {
         {
             name: 'Jane Doe',
             avatar: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png',
-            comment: 'Great place to stay, highly recommend!',
+            comment: 'OK',
             rating: 4.5,
             date: 'May 1, 2023',
         },
         {
             name: 'John Smith',
             avatar: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png',
-            comment: 'Amazing experience, will definitely stay here again!',
+            comment: 'Tốt!',
             rating: 5,
             date: 'April 29, 2023',
         },
     ],
 };
-
+const mapRoomType = new Map();
+mapRoomType.set('APARTMENT', 'Chung cư');
+mapRoomType.set('MOTEL', 'Phòng trọ');
+mapRoomType.set('HOUSE', 'Nhà nguyên căn');
+const mapInteriorStatus = new Map();
+mapInteriorStatus.set('FULL', 'Đầy đủ');
+mapInteriorStatus.set('EMPTY', 'Phòng trống');
+mapInteriorStatus.set('LUXURY', 'Cao cấp');
 const RoomDetail = () => {
     const { id } = useParams();
     const [room, setRoom] = useState(null);
@@ -48,112 +56,123 @@ const RoomDetail = () => {
     const getImage = (name) => {
         return `https://firebasestorage.googleapis.com/v0/b/accommodation-306b8.appspot.com/o/files%2F${name}?alt=media`;
     };
+    const formatCurrent = (amount) => {
+        return amount.toLocaleString('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+        });
+    };
+
     useEffect(() => {
         axios
             .get(`${import.meta.env.VITE_API_BASE_URL}/rooms/${id}`)
             .then((response) => {
-                console.log(response.data);
-                if (response.data.listImages > 0) {
-                    let images = [];
-                    for (var x of response.data.listImages) {
-                        images.push(getImage(x));
-                    }
-                    setListImages(images);
-                }
                 setRoom(response.data);
+                const imgSrc = response.data.listImages;
+                let images = [];
+                imgSrc.forEach((img) => images.push(getImage(img)));
+                setListImages(images);
             })
             .catch((err) => {
                 console.log(' Lỗi' + err);
             });
     }, []);
+
     return (
         <div className="room-detail">
-            <Row gutter={[16, 16]}>
-                <Col xs={24} md={12}>
-                    <Card cover={<img alt="room" src={room == null ? '' : getImage(room.listImages[0])} />}>
-                        <List
-                            grid={{ gutter: 16, column: 5 }}
-                            dataSource={listImages}
-                            renderItem={(item) => (
-                                <List.Item>
-                                    <img alt="room" src={item} />
-                                </List.Item>
-                            )}
-                        />
-                    </Card>
-                </Col>
-                <Col xs={24} md={12}>
-                    <Card>
-                        <div className="host-info">
-                            <Avatar size={64} icon={<UserOutlined />} src={hostInfo.avatar} />
-                            <div>
-                                <Title level={4}>{room == null ? '' : room.hostResponse.name}</Title>
+            {room == null ? (
+                ''
+            ) : (
+                <Row gutter={[16, 16]}>
+                    <Col xs={24} md={12}>
+                        <Carousel autoplay>
+                            {listImages.map((item) => (
+                                <Card cover={<img alt="room" src={item} />}></Card>
+                            ))}
+                        </Carousel>
+                    </Col>
+                    <Col xs={24} md={12}>
+                        <Card>
+                            <div className="host-info">
+                                <Avatar size={64} icon={<UserOutlined />} src={hostInfo.avatar} />
+                                <div>
+                                    <Title level={4}>{room.hostResponse.name}</Title>
+                                    <Text>Ngày đăng: {new Date(room.createDate).toLocaleDateString('vi-VN')}</Text>
+                                    <br />
+                                    <Text>CMND: {room.hostResponse.idCard}</Text>
+                                </div>
+                            </div>
+                            <Button type="primary">{room.hostResponse.phoneNumber}</Button>
+                            <Divider />
+                            <div className="room-info">
+                                <Title level={3}>{room.title}</Title>
+
+                                <Typography.Title level={5}>
+                                    {`${formatCurrent(room.rentCost)}/tháng`} - {`${room.size} m²`}
+                                </Typography.Title>
+                                <br />
                                 <Text>
-                                    Ngày đăng:
-                                    {room == null ? '' : new Date(room.createDate).toISOString().split('T')[0]}
+                                    <span style={{ color: 'black' }}>Địa chỉ: </span>
+                                    {`${room.location.houseNumber}, ${room.location.street}, ${room.location.ward}, ${room.location.district}, ${room.location.city}`}
                                 </Text>
                                 <br />
-                                <Text>CMND: {room == null ? '' : room.hostResponse.idCard}</Text>
-                            </div>
-                        </div>
-                        <Button type="primary">{room == null ? '' : room.hostResponse.phoneNumber}</Button>
-                        <Divider />
-                        <div className="room-info">
-                            <Title level={3}>{room == null ? '' : room.title}</Title>
-                            <Typography.Title level={5}>
-                                {room == null ? '' : `${room.rentCost} đ/tháng`} -{' '}
-                                {room == null ? '' : `${room.size} m²`}
-                            </Typography.Title>
-                            <Text>
-                                Địa chỉ:{' '}
-                                {room == null
-                                    ? ''
-                                    : `${room.location.houseNumber}, ${room.location.street}, ${room.location.ward}, ${room.location.district}, ${room.location.city}`}
-                            </Text>
-                            <br />
-                            <Text>Loại: {room == null ? '' : `${room.type}`}</Text>
-                            <br />
-                            <Text>Số phòng ngủ: {room == null ? '' : `${room.bedRoomNumber}`}</Text>
-                            <br />
-                            <Text>Số phòng tắm: {room == null ? '' : `${room.bathRoomNumber}`}</Text>
-                            <br />
-                            <Typography.Title level={6}>
-                                {room == null ? '' : `${room.rentCost} đ/tháng`} -{' '}
-                                {room == null ? '' : `${room.size} m²`}
-                            </Typography.Title>
-                            <Rate disabled defaultValue={roomInfo.rating} />
-                            <Text>{` ${roomInfo.rating.toFixed(1)} (${roomInfo.reviews.length} reviews)`}</Text>
-                            <br />
+                                <Text>
+                                    {' '}
+                                    <span style={{ color: 'black' }}>Tiền cọc: </span>{' '}
+                                    {`${formatCurrent(room.deposit)}`}
+                                </Text>
+                                <br />
+                                <Text>
+                                    {' '}
+                                    <span style={{ color: 'black' }}>Loại: </span> {`${mapRoomType.get(room.type)}`}
+                                </Text>
+                                <br />
+                                <Text>
+                                    {' '}
+                                    <span style={{ color: 'black' }}>Nội thất: </span>{' '}
+                                    {`${mapInteriorStatus.get(room.interiorStatus)}`}
+                                </Text>
+                                <br />
+                                <Text>
+                                    {' '}
+                                    <span style={{ color: 'black' }}>Số phòng ngủ: </span> {`${room.bedRoomNumber}`}
+                                </Text>
+                                <br />
+                                <Text>
+                                    {' '}
+                                    <span style={{ color: 'black' }}>Số phòng tắm: </span> {`${room.bathRoomNumber}`}
+                                </Text>
+                                <br />
+                                <Rate disabled defaultValue={roomInfo.rating} />
+                                <Text>{` ${roomInfo.rating.toFixed(1)} (${roomInfo.reviews.length} reviews)`}</Text>
+                                <br />
 
-                            <br />
-                            <br />
-                            <Text>{room == null ? '' : room.description}</Text>
-                            <br />
-                            <br />
-                            <Title level={4}>Amenities</Title>
-                            <Text>{roomInfo.amenities.join(', ')}</Text>
-                        </div>
-                        <Divider />
-                        <div className="reviews">
-                            <Title level={4}>Reviews</Title>
-                            <List
-                                itemLayout="vertical"
-                                dataSource={roomInfo.reviews}
-                                renderItem={(review) => (
-                                    <List.Item>
-                                        <List.Item.Meta
-                                            avatar={<Avatar src={review.avatar} />}
-                                            title={review.name}
-                                            description={`${review.rating} stars - ${review.date}`}
-                                        />
-                                        {review.comment}
-                                    </List.Item>
-                                )}
-                            />
-                        </div>
-                    </Card>
-                </Col>
-            </Row>
+                                <br />
+                                <Title level={4}>Mô tả</Title>
+                                <Text>{room.description}</Text>
+                            </div>
+                            <Divider />
+                            <div className="reviews">
+                                <Title level={4}>Nhận xét</Title>
+                                <List
+                                    itemLayout="vertical"
+                                    dataSource={roomInfo.reviews}
+                                    renderItem={(review) => (
+                                        <List.Item>
+                                            <List.Item.Meta
+                                                avatar={<Avatar src={review.avatar} />}
+                                                title={review.name}
+                                                description={`${review.rating} stars - ${review.date}`}
+                                            />
+                                            {review.comment}
+                                        </List.Item>
+                                    )}
+                                />
+                            </div>
+                        </Card>
+                    </Col>
+                </Row>
+            )}
         </div>
     );
 };

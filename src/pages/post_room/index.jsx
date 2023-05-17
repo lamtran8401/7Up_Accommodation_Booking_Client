@@ -8,6 +8,7 @@ import AddressModal from '../../components/modal-address';
 import { storage } from '../../config/firebase';
 import { errorMessageCounDown, successMessageCounDown } from '../../config/utils';
 import './PostRoom.scss';
+import useAuth from '@/hooks/useAuth';
 const PostRoom = () => {
     //Init
     const maxFile = 8;
@@ -23,6 +24,7 @@ const PostRoom = () => {
     const [addressObj, setAddressObj] = useState({});
     const [modalMessage, contextHolderMessage] = Modal.useModal();
     const promises = [];
+    const [currentUser, , logout, hasPermission] = useAuth();
 
     //Submit form
     const hanldeUploadFileToFirebase = () => {
@@ -55,6 +57,7 @@ const PostRoom = () => {
         loading.classList.add('show-loader');
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
+        values.hostId = currentUser.host.id;
         axios
             .post(`${import.meta.env.VITE_API_BASE_URL}/rooms/create/1`, values)
             .then((response) => {
@@ -215,7 +218,7 @@ const PostRoom = () => {
                             <Input readOnly placeholder="Chọn loại phòng cho thuê"></Input>
                         </Form.Item>
                         <Form.Item
-                            name="iteriorStatus"
+                            name="interiorStatus"
                             label="Tình trạng nội thất"
                             className="form__item"
                             required={false}

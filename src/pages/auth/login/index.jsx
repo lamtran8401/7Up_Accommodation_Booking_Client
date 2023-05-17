@@ -78,7 +78,7 @@ const Login = () => {
                 </Form.Item>
                 <Form.Item className="form__item">
                     <Button className="form__btn" type="primary" htmlType="submit">
-                        Đăng ký
+                        Đăng nhập
                     </Button>
                 </Form.Item>
             </Form>
