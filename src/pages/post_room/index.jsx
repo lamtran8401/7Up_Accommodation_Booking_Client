@@ -263,7 +263,7 @@ const PostRoom = () => {
                                 />
                             </Form.Item>
                             <Form.Item
-                                name="diposit"
+                                name="deposit"
                                 label="Tiền cọc (VND)"
                                 required={false}
                                 style={{
