@@ -59,7 +59,7 @@ const PostRoom = () => {
         document.documentElement.scrollTop = 0;
         values.hostId = currentUser.host.id;
         axios
-            .post(`${import.meta.env.VITE_API_BASE_URL}/rooms/create/1`, values)
+            .post(`${import.meta.env.VITE_API_BASE_URL}/rooms/create/${currentUser.id}`, values)
             .then((response) => {
                 hanldeUploadFileToFirebase();
                 Promise.all(promises)

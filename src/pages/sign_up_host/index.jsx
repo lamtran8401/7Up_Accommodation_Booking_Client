@@ -21,6 +21,7 @@ import AddressModal from '../../components/modal-address';
 import { storage } from '../../config/firebase';
 import { errorMessageCounDown, successMessageCounDown } from '../../config/utils';
 import './SignUpHost.scss';
+import useAuth from '@/hooks/useAuth';
 const SignUpHost = () => {
     //Init
     const maxFile = 8;
@@ -36,6 +37,7 @@ const SignUpHost = () => {
     const [addressObj, setAddressObj] = useState({});
     const [modalMessage, contextHolderMessage] = Modal.useModal();
     const promises = [];
+    const [currentUser, setCurrentUser, logout, hasPermission] = useAuth();
 
     const showModal = () => {
         setVisibleModal(true);
@@ -67,9 +69,10 @@ const SignUpHost = () => {
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
         axios
-            .post(`${import.meta.env.VITE_API_BASE_URL}/accounts/registerHost/3`, values)
+            .post(`${import.meta.env.VITE_API_BASE_URL}/accounts/registerHost/${currentUser.id}`, values)
             .then((response) => {
                 form.resetFields();
+                setCurrentUser(response.data);
                 //setFileList([]);
                 loading.classList.remove('show-loader');
                 loading.classList.add('hide-loader');
