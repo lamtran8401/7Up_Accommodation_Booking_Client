@@ -65,7 +65,7 @@ const Header = () => {
             </div>
             <Search />
             <div className="top-action">
-                {!currentUser?.username ? (
+                {currentUser == null || currentUser == [] ? (
                     <>
                         <Link to="/auth/register" className="btn-action">
                             Tạo tài khoản
@@ -90,10 +90,15 @@ const Header = () => {
                                 </Link>
                             )}
                         </Button>
-                        <Link to="/manage-post" className="btn-action">
-                            <InboxStackIcon className="icon" />
-                            <span>Quản lý tin</span>
-                        </Link>
+                        {hasPermission('ADMIN') ? (
+                            <Link to="/manage-post" className="btn-action">
+                                <InboxStackIcon className="icon" />
+                                <span>Quản lý tin</span>
+                            </Link>
+                        ) : (
+                            ''
+                        )}
+
                         <Link to="/search-plus" className="btn-action">
                             <MagnifyingGlassPlusIcon className="icon" />
                             <span>Tìm nâng cao</span>
