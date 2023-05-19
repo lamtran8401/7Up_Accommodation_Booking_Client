@@ -41,7 +41,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/signup-host',
-                element: <PrivateRoute element={<SignUpHost />} />,
+                element: <SignUpHost />,
             },
             {
                 path: '/manage-post',

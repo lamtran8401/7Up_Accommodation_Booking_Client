@@ -57,10 +57,15 @@ const ManagePost = () => {
             key: 'action',
             render: (_, record) => (
                 <>
-                    {/* <Button onClick={() => editRoom(record)}>Edit</Button> */}
-                    <Popconfirm title="Bạn có muốn vô hiệu hoá phòng này?" onConfirm={() => deleteRoom(record.id)}>
-                        <Button type="danger">Vô hiệu hoá</Button>
-                    </Popconfirm>
+                    {record.activeStatus == 'ACTIVE' ? (
+                        <Popconfirm title="Bạn có muốn khoá tin này?" onConfirm={() => deleteRoom(record.id)}>
+                            <Button type="danger">Khoá</Button>
+                        </Popconfirm>
+                    ) : (
+                        <Popconfirm title="Bạn có muốn mở khoá tin này?" onConfirm={() => enableRoom(record.id)}>
+                            <Button type="danger">Mở khoá</Button>
+                        </Popconfirm>
+                    )}
                 </>
             ),
         },
@@ -97,12 +102,34 @@ const ManagePost = () => {
         axios
             .get(`${import.meta.env.VITE_API_BASE_URL}/rooms/disable/${id}`)
             .then((response) => {
-                const updatedData = rooms.filter((item) => item.id !== id);
+                const updatedData = rooms.map((item) => {
+                    if (item.id === id) {
+                        return { ...item, activeStatus: 'INACTIVE' }; // Thay đổi giá trị của phần tử có id là 2
+                    }
+                    return item;
+                });
                 setRooms(updatedData);
-                successMessageCounDown(5, 'Vô hiệu hoá thành công', modalMessage);
+                successMessageCounDown(5, 'Đã khoá tin', modalMessage);
             })
             .catch((err) => {
-                errorMessageCounDown(5, 'Vô hiệu hoá thât bại', modalMessage);
+                errorMessageCounDown(5, 'Khoá tin thất bại', modalMessage);
+            });
+    };
+    const enableRoom = (id) => {
+        axios
+            .get(`${import.meta.env.VITE_API_BASE_URL}/rooms/enable/${id}`)
+            .then((response) => {
+                const updatedData = rooms.map((item) => {
+                    if (item.id === id) {
+                        return { ...item, activeStatus: 'ACTIVE' }; // Thay đổi giá trị của phần tử có id là 2
+                    }
+                    return item;
+                });
+                setRooms(updatedData);
+                successMessageCounDown(5, 'Đã mở khoá tin', modalMessage);
+            })
+            .catch((err) => {
+                errorMessageCounDown(5, 'Mở khoá tin thất bại', modalMessage);
             });
     };
     const getImage = (name) => {
@@ -116,7 +143,7 @@ const ManagePost = () => {
     };
     useEffect(() => {
         axios
-            .get(`${import.meta.env.VITE_API_BASE_URL}/rooms`)
+            .get(`${import.meta.env.VITE_API_BASE_URL}/rooms/all`)
             .then((response) => {
                 const dataResponse = response.data;
                 const rooms = dataResponse.map((room) => {
@@ -127,6 +154,7 @@ const ManagePost = () => {
                         bedRoomNumber: room.bedRoomNumber,
                         deposit: room.deposit,
                         description: room.description,
+                        activeStatus: room.activeStatus,
                         image: getImage(room.listImages[0]),
                         rentCost: formatCurrent(room.rentCost),
                         type: mapRoomType.get(room.type),
@@ -137,7 +165,9 @@ const ManagePost = () => {
                 });
                 setRooms(rooms);
             })
-            .catch((err) => {});
+            .catch((err) => {
+                console.log(err);
+            });
     }, []);
     const RoomForm = ({ onFinish, initialValues }) => (
         <Form onFinish={onFinish} initialValues={initialValues}>

@@ -117,7 +117,7 @@ const Header = () => {
                 )}
             </div>
             <Modal title="Thông báo" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                <p>Bạn chưa đăng ký tài khoản môi giới. Đăng ký ngay !</p>
+                <p>Bạn chưa hoàn thiện thông tin người đăng. Bổ sung ngay !!</p>
             </Modal>
         </Layout.Header>
     );

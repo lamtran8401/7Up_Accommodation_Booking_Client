@@ -89,7 +89,7 @@ const SignUpHost = () => {
     return (
         <div className="sign-up-host">
             <Typography.Title level={2} className="form__title">
-                Đăng ký tài khoản môi giới
+                Hoàn thiện thông tin người đăng
             </Typography.Title>
             <div id="loading" className="loader-line hide-loader"></div>
 
@@ -192,7 +192,7 @@ const SignUpHost = () => {
                 </Form.Item>
                 <Form.Item className="form__item">
                     <Button className="form__btn" type="primary" htmlType="submit">
-                        Đăng ký
+                        Xác nhận
                     </Button>
                 </Form.Item>
             </Form>
